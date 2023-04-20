@@ -1,0 +1,1944 @@
+---
+title: "Los Elevadores de la Universidad de Ingeniería y Tecnología (UTEC)"
+author: "Grupo 7"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    number_sections: no
+    theme: yeti
+  pdf_document:
+    toc: yes
+---
+
+<center>
+![](Utec-logo.jpg){width=150px}
+
+</center>
+**<span style="color:dodgerblue"> Integrantes<span>** |**<span style="color:dodgerblue"> Código<span>**|**<span style="color:dodgerblue"> Participación<span>**
+:---|:---:|:---:
+Guerrero Vásquez, Ana Paula | 202010138| 100%
+San Martín Amarrortu, Maria Paula | 202010390| 100%
+García Rodriguez, Karol Adriana | 202010262 | 100%
+Camasca Tapara, Jhon David | 201920106 | 100%
+Campos Castañeda, Brandon Jesús |202010465 | 100%
+Vila Centeno, Lennin Cristopher | 201610403 | 100%
+
+### **<span style="color:dodgerblue"> 1. INTRODUCCIÓN <span>**
+
+<div style="text-align: justify">
+A inicios del ciclo 2022-1, luego de dos años de virtualidad tras la pandemia del Covid-19, la Universidad de Tecnología e Ingeniería (UTEC) se vio en la posibilidad de retornar a un presencialidad gradual, la cual se completó a mediados de dicho periodo. Fue así que un gran número de estudiantes, maestros y administrativos, mayor al de años anteriores a la pandemia, empezamos a encontrarnos cada día en el campus. Ello ha conllevado a que los diversos espacios sean cada vez más visitados y, en consecuencia, a que tengamos la necesidad de trasladarnos a lo largo de los 13 pisos principales (contándose los 2 sótanos). Como resultado, se percibieron múltiples quejas de los usuarios acerca de los ascensores, sobre todo con respecto a los tiempos de espera, dada la alta demanda de los mismos en ciertos horarios. Por ello, el presente proyecto busca caracterizar las diversas variables que involucran el uso de este servicio, así como evaluar los problemas de interés encontrados en el proceso.
+</div>
+
+### **<span style="color:dodgerblue"> 2. DESCRIPCIÓN DEL PROCESO <span>**
+
+<div style="text-align: justify">
+Para conocer más la dinámica, se debe saber que UTEC cuenta con dos “torres” (una cercana a la puerta principal y la otra ubicada más al fondo). En cada una de ellas se ubican 4 ascensores que toman como denominación las letras A, B, C y D. A diferencia de la mayoría de ascensores donde encuentras solo dos botones (para subir o bajar) y dentro de la cabina seleccionas el piso correspondiente, en este caso se encuentran paneles afuera donde el usuario indica el piso de destino y se le da a conocer el ascensor al cual deberá esperar. Los ascensores funcionan todo el día; no obstante, el número de usuarios interesados en usar este servicio a lo largo del tiempo no es un valor conocido, pues serán diversas variables las que intervendrán en sus decisiones.
+</div>
+
+<center>
+![](sin_titulo-1_8.jpg){width=520px}
+
+*Figura N°1. Vista panorámica de la UTEC*
+
+### **<span style="color:dodgerblue"> 3. DISCIPLINA DE LLEGADA DE LOS INDIVIDUOS AL SISTEMA <span>**
+ 
+<div style="text-align: justify">
+Como se puede inferir de la descripción general, el tiempo de llegada de los usuarios, así como el tiempo entre llegadas, puede ser modelado mediante una variable aleatoria (no determinística), es decir, son parte de un proceso estocástico. Así mismo, con el fin de conocer el número de unidades que llegan al sistema en hasta cierto instante de tiempo, se deberá realizar un conteo (discreto). Para ello, es importante señalar que la llegada de las unidades puede hacer referencia a quienes llegan de manera individual, así como quienes lo hacen de forma grupal (2 o más personas). De igual modo, como resultado de la observación y experiencia, se sabe que el modelo de llegada es no estacionario, ya que la llegada de personas al sistema varía en distintos momentos del día, ya sea si se compara mediante mañana, tarde y noche, o si se hace la diferenciación a lo largo de una hora específica. Los ascensores se bifurcan en cuatro estaciones, siendo estos los cuatro ascensores para los cuales se puede considerar que se forman 4 colas distintas.
+</div>
+
+<center>
+![](6.jpg){width=520px}
+
+*Figura N°2. Vista a los ascensores de la UTEC*
+
+### **<span style="color:dodgerblue"> 4. DESCRIPCIÓN DE LOS CLIENTES O USUARIOS <span>**
+ 
+<div style="text-align: justify">
+Los clientes o usuarios a los que está dirigido el uso del ascensor son principalmente el alumnado o personal de la misma universidad. Por lo que no habría distinción entre ellos, porque usan el ascensor con el mismo objetivo. 
+No obstante, podemos percatarnos que existen dos tipos de comportamiento:
+
+- El usuario que espera a su ascensor, al cual lo denominaremos como **TIPO A**.
+
+- El usuario que luego de un largo tiempo o la capacidad del ascensor se retire del proceso, al cual denominaremos como **TIPO B**.
+</div>
+
+<center>
+![](7.jpg){width=200px}
+
+*Figura N°3. Vista a los ascensores con cola de la UTEC*
+
+### **<span style="color:dodgerblue"> 5. DESCRIPCIÓN DEL PROCESO SELECCIONADO EN RELACIÓN A LOS SIGUIENTES ASPECTOS <span>**
+
+<div style="text-align: justify">
+**<span style="color:darkblue"> a) Disciplina de servicio en cada una de las estaciones en donde la unidad reciba los servicios <span>**
+
+La atención de los ascensores se puede modelar como un proceso estocástico pues tiene un tiempo de servicios variables. El proceso empieza con la llegada de un individuo al área dónde se encuentran los ascensores, no obstante, para el estudio tomaremos como primera estación la elección del piso al que se desean trasladar. El servicio de atención de la primera estación es de forma individual, y se puede observar la disciplina de llegada (FCFS), lo que se traduce a “First Come First Served” y quiere decir que el primero en llegar, será atendido primero. En la segunda estación, es decir los ascensores, la atención puede ser de manera individual o en grupos dependiendo del día y la hora. Es en esta estación en la que se generan colas, siendo de mayor magnitud en las “horas pico” y dificultando el proceso.
+</div>
+
+<div style="text-align: justify">
+**<span style="color:darkblue"> b) Disciplina de atención en cada una de las colas <span>**
+
+A diferencia de las colas “normales” donde las unidades se ubican una detrás de la otra, aquí las personas se forman como aglomeraciones. No obstante, ello no evita que se den los distintos fenómenos que ocurren en las colas. Por ejemplo, suele darse que algunos usuarios estén esperando al ascensor designado, pero notan que llega otro ascensor que va al mismo piso o a uno cercano al que se quieren dirigir y optan por entrar a este, lo cual podríamos considerar como una especie de “jockeying” pues es como si se cambiara de cola. Así mismo, también sucede que tras la haber marcado al piso y asignarles un ascensor, se dan cuenta que ya hay mucha gente haciendo cola para el mismo, por lo cual optan por irse del sistema, siendo posible que finalmente usen las escaleras para subir. Dichas unidades son llamadas “frustrados”. De igual modo, están los “renegados” quienes también dejan el sistema, pero ellos lo hacen tras una larga espera por su ascensor que no llega o lo hace muy lleno.
+</div>
+
+<div style="text-align: justify">
+**<span style="color:darkblue"> c) Capacidad del sistema <span>**
+
+La capacidad del sistema se calcula según la cantidad de ascensores y la cantidad de peso que esta puede soportar.
+</div>
+
+<center>
+![](1.png){width=520px}
+
+*Figura N°4. Los ascensores de UTEC gráficados de manera minimalista*
+
+<div style="text-align: justify">
+Cada ascensor tiene una capacidad de 1600 kilos, al ser cuatro ascensores, el sistema tiene capacidad de 6400 kilos en total.	
+
+Cada ascensor tiene una capacidad de 21 personas, al ser cuatro ascensores, el sistema tiene capacidad de 84 personas en total.	
+</div>
+
+<center>
+![](2.png){width=520px}
+
+*Figura N°5. Cartel de capacidad*
+
+<div style="text-align: justify">
+**<span style="color:darkblue"> d) Número de canales del servicio <span>**
+
+Según lo señalado en los planos de construcción de la UTEC, hay dos zonas orientadas para ubicar los ascensores. Cada zona, o mejor conocido como “Torre 1” y “Torre 2”, posee una disponibilidad de cuatro (4) ascensores con las mismas condiciones indicadas en la “Capacidad del sistema”. Entonces, contamos con ocho (8) ascensores a disposición del alumnado y personal administrativo de UTEC. Además, cada piso posee paneles para seleccionar el piso a donde se quiera ir, cada zona posee dos (2) paneles. Exceptuando el primer piso que posee cuatro (4) paneles en cada torre.
+
+Al observar el comportamiento de los canales previamente mencionados, podemos decir que es un sistema multicanal (Multichannel queuing system) que permite tener una cola de espera en cada canal. Esto se puede ver al momento en que un grupo de estudiantes desean trasladarse en la universidad. Formándose una (1) cola para cada panel.
+</div>
+
+<center>
+![](3.png){width=520px}
+
+*Figura N°6. Multichannel queuing system*
+
+<div style="text-align: justify">
+
+Por parte de las colas formadas para cada ascensor, podemos percatarnos que poseen un comportamiento parecido a un canal de servicio de cola típico (Typical queuing process). Esto es debido a que, en la estación anterior, se derivó al estudiante al ascensor indicado formando este comportamiento en la cola.
+</div>
+
+<center>
+![](4.png){width=520px}
+
+*Figura N°6. Typical queuing process*
+
+<div style="text-align: justify">
+
+Por lo que podemos decir que existen dos (2) tipos de comportamiento de filas en las dos estaciones indicadas.
+</div>
+
+<div style="text-align: justify">
+**<span style="color:darkblue"> e) Número de estaciones de servicio <span>**
+
+Como se mencionó en el anterior inciso, se puede evidenciar la existencia de dos (2) estaciones en el servicio de ascensores de la UTEC.
+
+- **Estación de Paneles:** En esta estación, el usuario selecciona el piso donde se quiere dirigir y espera una respuesta del panel, donde le indica a que ascensor debe esperar para llegar a su destino. Como se mencionó, en el primer piso hay una diferencia, la cual es la disponibilidad de cuatro (4) paneles a diferencia de los anteriores pisos de dos (2), en cada torre.
+
+- **Estación de la espera del ascensor:** En esta estación, el usuario luego de ser derivado por la estación anterior, se dirige a la zona de espera del ascensor asignado, ya sea, ascensor “A”, ascensor “B”, ascensor “C” o ascensor “D”. Donde se realizará la cola correspondiente para el ingreso al ascensor correspondiente. Se podría decir que esta estación posee cuatro (4) subcanales.
+</div>
+
+<center>
+![](5.png){width=520px}
+
+*Figura N°7. Esquema de las estaciones del proceso de los ascensores*
+
+<div style="text-align: justify">
+### **<span style="color:dodgerblue"> 6. PROBLEMAS IDENTIFICADOS<span>**
+
+**<span style="color:orange"> Número de pregunta <span>** |**<span style="color:orange"> Interrogante <span>**|**<span style="color:orange"> Variable de interés <span>**|**<span style="color:orange"> Relevancia <span>**
+:---|:---|:---|:---
+**Preg. 1**| ¿Cuál es la torre con mayor flujo de personas? | Cantidad de personas en un intervalo de tiempo| Esta variable nos ayudará a saber en que torre hay más afluencia de personas, es relevante porque nos ayudará a tomar medidas o plantear soluciones para evitar tener una torre sobrecargada. 
+**Preg. 2**| ¿Cantidad máxima de tiempo de espera?  | Tiempo entre llegadas| Esta variable es importante porque se podrá saber cuanto es el máximo de tiempo de espera que se da en el sistema, si el tiempo de espera es muy alto será un indicador para plantear soluciones.
+**Preg. 3**| ¿La probabilidad de que las personas lleguen en grupos mayores a 3?| Variable grupo | La relevancia de esta pregunta es importante porque si la probabilidad de llegar en grupo es muy alta quiere decir que el canal puede no ser suficiente para satisfacer la demanda de los alumnos porque el ascensor nos considera la llegada de grupos y si a varios grupos les toca un mismo canal, habrá un problema.
+**Preg. 4**|¿Cuál es el tiempo promedio total desde que un alumno ingresa al sistema hasta que salga del sistema?| Tiempo total en el sistema| Esta pregunta no permite saber cuánto se demora normalmente una persona en llegar a su destino, a pesar de que el tiempo de viaje en el ascensor es determinístico esta pregunta nos ayuda a mapear cuántos alumnos salen del sistema fuera del promedio. 
+**Preg. 5**| ¿Cuál es la probabilidad de que una persona que viaja en un canal distinto llegue más rápido a un mismo piso que otra persona en otro canal?| Duración del servicio| Esta pregunta es útil para saber si los canales se están distribuyendo correctamente o si algunas están siendo saturadas por temas programación de la empresa encargada.
+
+</div>
+
+### **<span style="color:dodgerblue"> 7. VARIABLES IDENTIFICADAS<span>**
+
+<div style="text-align: justify">
+**<span style="color:darkblue"> Categóricas<span>**
+
+- Piso: Esta variable puede variar de 1 al 11. Debido a la cantidad de pisos disponibles en la estructura.
+
+- Canal: Esta variable puede variar entre A, B, C y D.
+
+- Torre: Esta variable puede variar entre "Torre A" y "Torre B".
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:darkblue"> Numéricas<span>**
+
+- Tiempo de llegada al ascensor: Esta variable nos va a servir para saber a que en que momento nuestro usuario entra al proceso. (En segundos)
+
+- Tiempo entre llegadas: Esta variable nos va a servir para ver cuanto tiempo hay entre cada nuevo usuario. (En segundos)
+
+- Tiempo en la estación de espera: Esta variable nos va servir para saber cuanto es el tiempo de espera antes de ser atendido (entrar al ascensor). (En segundos)
+
+- Tiempo de total en el proceso: Esta variable nos sirve para saber el tiempo total que un usuario este dentro del proceso. (En segundos)
+
+</div>
+
+### **<span style="color:dodgerblue"> 8. TAMAÑO DE MUESTRA<span>**
+
+<div style="text-align: justify">
+**<span style="color:darkblue"> a) Plantilla utilizada para el Pre-muestreo <span>**
+
+A partir de la cooperación entre los otros grupos, se ha acordado usar una plantilla parecida a esta:
+</div>
+
+
+<center>
+![](plantilla.png)
+
+*Figura N°8. Plantilla usada para el Pre-muestreo*
+
+<div style="text-align: justify">
+
+Para llenar la plantilla, el grupo se ha posicionado en el piso 1, en cada torre, a la 13:42:00 y tomó la muestra respectiva por 30 minutos.
+
+</div>
+
+```{r setup, include=FALSE}
+lista.paquetes <- c("readr","dplyr","fitdistrplus") 
+nuevos.paquetes <- lista.paquetes[!(lista.paquetes %in% installed.packages()[,"Package"])]
+if(length(nuevos.paquetes)) install.packages(nuevos.paquetes) 
+
+library(readr)
+library(dplyr)
+library(fitdistrplus)
+
+
+n_muestra <- function(sd, confi, tol){
+  return(round(((sd/tol)*qnorm((confi+1)/2))^2))
+} 
+
+DF <- read_csv("Union1.csv") #CAMBIAR
+DF1 <- read_csv("Union2.csv")
+
+colnames(DF)[1:14]<-c("NUM_CLI","PISO","CANAL","TORRE","H_LLEGADAS","H_ATENCION","T_SERVICIO","TIEMPO_ENTRE_LLEGADA","H_LLEGADASA","H_ATENCIONA","T_SERVICIOA","H_SALIDA","T_T_PROCESO","TIPO_C")
+
+colnames(DF1)[1:16]<-c("NUM_CLI","PISO","TORRE","CANAL","GRUPO","H_LLEGADA","H_ATENCION","T_SERVICIO","T_ENTRE_LLEGADA","H_LLEGADAA","H_ATENCIONA","T_SERVICIOA","H_SALIDA","T_T_PROCESO","TIPO_C","T_ESPE_ASC")
+
+Fila1<- DF$NUM_CLI
+Fila2<- DF$PISO
+Fila3<- DF$CANAL
+Fila4<- DF$TORRE
+Fila5<- DF$H_LLEGADAS
+Fila6<- DF$H_ATENCION
+Fila7<- DF$T_SERVICIO
+Fila8<- DF$TIEMPO_ENTRE_LLEGADA
+Fila9<- DF$H_LLEGADASA
+Fila10<- DF$H_ATENCIONA
+Fila11<- DF$T_SERVICIOA
+Fila12<- DF$H_SALIDA
+Fila13<- DF$T_T_PROCESO
+Fila14<- DF$TIPO_C
+
+F1<- DF1$NUM_CLI
+F2<- DF1$PISO
+F3<- DF1$TORRE
+F4<- DF1$CANAL
+F5<- DF1$GRUPO
+F6<- DF1$H_LLEGADA
+F7<- DF1$H_ATENCION
+F8<- DF1$T_SERVICIO
+F9<- DF1$T_ENTRE_LLEGADA
+F10<- DF1$H_LLEGADAA
+F11<- DF1$H_ATENCIONA
+F12<- DF1$T_SERVICIOA
+F13<- DF1$H_SALIDA
+F14<- DF1$T_T_PROCESO
+F15<- DF1$TIPO_C
+F16<- DF1$T_ESPE_ASC
+
+require(utils)
+try(data(package = "fitdistrplus"))
+
+data(DF1)
+
+
+```
+
+
+```{r eval=TRUE, echo=FALSE, message=FALSE,warning=FALSE}
+DA <-subset(DF1,DF1$TORRE=="A")
+DB <-subset(DF1,DF1$TORRE=="B")
+
+A1<- DA$NUM_CLI
+A2<- DA$PISO
+A3<- DA$TORRE
+A4<- DA$CANAL
+A5<- DA$GRUPO
+A6<- DA$H_LLEGADA
+A7<- DA$H_ATENCION
+A8<- DA$T_SERVICIO
+A9<- DA$T_ENTRE_LLEGADA
+A10<- DA$H_LLEGADAA
+A11<- DA$H_ATENCIONA
+A12<- DA$T_SERVICIOA
+A13<- DA$H_SALIDA
+A14<- DA$T_T_PROCESO
+A15<- DA$TIPO_C
+A16<- DA$T_ESPE_ASC
+
+B1<- DB$NUM_CLI
+B2<- DB$PISO
+B3<- DB$TORRE
+B4<- DB$CANAL
+B5<- DB$GRUPO
+B6<- DB$H_LLEGADA
+B7<- DB$H_ATENCION
+B8<- DB$T_SERVICIO
+B9<- DB$T_ENTRE_LLEGADA
+B10<- DB$H_LLEGADAA
+B11<- DB$H_ATENCIONA
+B12<- DB$T_SERVICIOA
+B13<- DB$H_SALIDA
+B14<- DB$T_T_PROCESO
+B15<- DB$TIPO_C
+B16<- DB$T_ESPE_ASC
+
+```
+
+```{r}
+table(DA$PISO)/nrow(DA)
+```
+
+
+```{r}
+with(DF1, boxplot(F16 ~ F3, ylab='Tiempo en espera'))
+```
+
+<div style="text-align: justify">
+```{r eval=TRUE, echo=FALSE, message=FALSE,warning=FALSE}
+head(DF,10)
+```
+
+</div>
+
+<div style="text-align: justify">
+
+Como se logra observar, durante el tiempo previamente dicho, se ha obtenido una cantidad de 100 datos. Por lo que podemos decir que nuestro lambda = 100 usuarios/30 minutos.
+
+A partir de los datos obtenidos, podemos usarlo para hallar nuestro tamaño de muestra.
+
+</div>
+
+<div style="text-align: justify">
+
+**<span style="color:darkblue"> b) Calculo del tamaño de muestra <span>**
+
+Para comenzar, formularemos nuestro tamaño de muestra con la tolerancia y confianza. A continuación, despejaremos la “n” para obtener la ecuación a utilizar para nuestro cálculo:
+</div>
+
+<center>
+$\text{P}(|\bar{X}_{n}-\mu|<T)\geq (1- \alpha)$
+
+$\text{P}(|\frac{\bar{X}_{n}-\mu}{\frac{\sigma}{\sqrt{n}}}|<\frac{T}{\frac{\sigma}{\sqrt{n}}})\geq (1- \alpha)$
+
+$\text{Por el teorema central del límite}$
+
+$\Phi(\frac{T}{\frac{\sigma}{\sqrt{n}}})-\Phi(-\frac{T}{\frac{\sigma}{\sqrt{n}}})\geq (1-\alpha)$
+
+$2\Phi(\frac{T}{\frac{\sigma}{\sqrt{n}}})-1\geq (1-\alpha)$
+
+$\Phi^{-1}(\Phi(\frac{T}{\frac{\sigma}{\sqrt{n}}}))\geq \Phi^{-1}(\frac{1+(1-\alpha)}{2})$
+
+$\text{n}\geq(\frac{\sigma}{T}\times(\Phi^{-1}(\frac{1+(1-\alpha)}{2})))^{2}$
+
+<center/>
+
+<div style="text-align: justify">
+
+Teniendo en cuenta la fórmula, podemos aplicarla con diferentes confianzas para ajustarla a nuestras necesidades. Aclarando que el resultado de cada variable de interés va a ser diferente, debido a que poseen desviaciones estándares diferentes. Por lo que el tamaño de la muestra mínima que se va a seleccionar va a ser la mayor de todas. A partir de esto, se procede a calcular el tamaño de muestra de cada una de las variables relevantes.
+
+</div>
+
+
+```{r eval=TRUE, echo=FALSE, message=FALSE,warning=FALSE}
+Variables_Importantes <- c("Tiempo de llegada al ascensor","Tiempo entre llegadas","Tiempo en la estación de espera","Tiempo de total en el proceso")
+
+Desviacion_Estandar_seg <- c(round(sd(Fila5, na.rm = T),2),round(sd(Fila8, na.rm = T),2),round(sd(Fila11, na.rm = T),2),round(sd(Fila13, na.rm = T),2))
+
+media_seg <- c(round(mean(Fila5,na.rm = FALSE),2),round(mean(Fila8,na.rm = FALSE),2),round(mean(Fila11,na.rm = FALSE),2),round(mean(Fila13,na.rm = FALSE),2))
+
+conf<-0.95
+Confianza <- c( conf,conf,conf,conf)   
+
+alfa<-1-conf
+
+tolF5=round(0.10*media_seg[1],2)
+tolF8=round(0.1*media_seg[2],2)
+tolF11=round(0.1*media_seg[3],2)
+tolF13=round(0.10*media_seg[4],2)
+
+Tolerancia_seg <- c(tolF5,tolF8,tolF11,tolF13)
+
+Tamanio_Muestra <- c(n_muestra(Desviacion_Estandar_seg[1],Confianza[1],Tolerancia_seg[1]), n_muestra(Desviacion_Estandar_seg[2],Confianza[2],Tolerancia_seg[2]), n_muestra(Desviacion_Estandar_seg[3],Confianza[3],Tolerancia_seg[3]), n_muestra(Desviacion_Estandar_seg[4],Confianza[4],Tolerancia_seg[4]))
+
+TABLA1 <- data.frame(Variables_Importantes,Desviacion_Estandar_seg, media_seg ,Confianza,Tolerancia_seg,Tamanio_Muestra)
+TABLA1
+
+```
+
+<div style="text-align: justify">
+Como podemos percatarnos,  vamos a elegir el tamaño de muestra mayor entre todas nuestras variables `r max(Tamanio_Muestra, na.rm = FALSE)` datos.
+
+Ya que sabemos que por 30 minutos tenemos 100 personas. Por lo que tendremos que `r 435/200` horas, es decir, 2 horas con 10 minutos con 30 segundos.
+
+</div>
+
+### **<span style="color:dodgerblue"> 9. RECOPILACIÓN DE DATOS FINALES<span>**
+
+<div style="text-align: justify">
+Dado que los grupos decidieron seguir una misma plantilla, los datos se van a tomar de manera colaborativa el día Lunes 21 de Noviembre desde las 13:10:00 hasta las 15:52:19. Debido a que entre todos quedamos en tener 500 datos, es decir, entre todos nos quedamos 02:49:19 para conseguir la DATA.
+
+</div>
+
+<center>
+![](planmu.png)
+
+*Figura N°8. Plantilla usada para el Muestreo Colaborativo*
+
+<div style="text-align: justify">
+```{r eval=TRUE, echo=FALSE, message=FALSE,warning=FALSE}
+head(DF1,10)
+```
+
+</div>
+
+
+### **<span style="color:dodgerblue"> 10. ANÁLISIS DE VARIABLES <span>**
+
+#### **<span style="color:dodgerblue"> 1. Tiempo entre llegadas <span>**
+<div style="text-align: justify">
+**<span style="color:darkblue">  Análisis descriptivo <span>**
+
+A partir de un gráfico de caja, podemos ver lo siguiente:
+</div>
+
+<center>
+```{r,echo=FALSE}
+boxplot(F9,breaks = 10,probability = TRUE, main = "Tiempo entre llegadas",xlab="Tiempo (seg)",col=rgb(0.7,1,0.2,0.5), horizontal = TRUE)
+abline(v = mean(F9, na.rm = TRUE), horizontal = TRUE,col="red",lwd=2)
+
+summary(F9, na.rm = TRUE)
+
+```
+
+<div style="text-align: justify">
+Según lo que podemos ver, nuestro tiempo mínimo es de 0.0 segundos y el tiempo máximo fue de 164 segundos. Entonces, el **Tiempo entre llegadas** varía en 164 segundos. Además, podemos decir que los datos se concentran entre [6.00;26.00] segundos.
+
+La media/promedio de los datos es de 12.50 segundos para la variable en estudio, representado con la línea roja. Y, que esta es mayor que la mediana (línea negra), lo que nos indica el sesgo hacia la derecha. También, podemos observar los datos atípicos.
+
+Viéndolo desde un histograma:
+</div>
+
+<center>
+```{r,echo=FALSE}
+hist(F9,breaks = 10,probability = TRUE, main = "Tiempo entre llegadas",ylab="Probabilidad",xlab="Tiempo (min)",col=rgb(0.7,1,0.2,0.5))
+
+```
+
+<div style="text-align: justify">
+En relación al tiempo entre llegada podemos observar que la frecuencia más alta se ve en los primeros intervalos, mientra va disminuyendo de manera progresiva, lo cual corresponde con el comportamiento de una variable aleatoria que sigue un **modelo exponencial**.
+
+</div>
+
+#### **<span style="color:dodgerblue"> 1.2 Modelo de la variable <span>**
+
+**<span style="color:green"> 1.2.1 Curva teórica vs histograma <span>**
+
+<div style="text-align: justify">
+Para realizar esta comparación, compararemos la distribución de densidad y acumulativa de los datos recogidos en el tamaño de muestra:
+
+</div>
+
+<center>
+```{r,echo=FALSE}
+plotdist(F9,histo = TRUE,demp = TRUE,col=rgb(0.7,1,0.2,0.5))
+```
+
+<div style="text-align: justify">
+Gracias a la cantidad de datos tomados, podemos ver una similitud con el **modelo exponencial** y esto se refleja en ambas gráficas presentadas.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> 1.2.2 Gráfica Cullen y Frey <span>**
+
+
+Para verificar que tan fiable es nuestro análisis anterior, nos ayudaremos de la gráfica Cullen y Frey:
+
+</div>
+
+```{r,echo=FALSE}
+descdist(F9,boot = 1000,)
+
+```
+
+<div style="text-align: justify">
+
+Como observamos en la gráfica, nuestros datos tienen una tendencia a ser una distribución **exponencial** y **gamma**. Por lo que hacemos un ajuste para ver en cual entraría nuestra variable.
+
+</div>
+
+```{r,echo=FALSE}
+EXP1<-gofstat(fitdist(DF1$T_ENTRE_LLEGADA,"exp"))
+EXP1
+plot(fitdist(DF1$T_ENTRE_LLEGADA,"exp"))
+fitdist(DF1$T_ENTRE_LLEGADA,"exp")
+```
+
+<div style="text-align: justify">
+
+Como observamos en la arriba, solo nos salen los parámetros para la exponencial y los gráficos señalan que se acerca mucho a una exponencial. Por lo que vamos a decir que se puede modelar como una **exponencial**. Además, que el Chi cuadrado tiene un P-value de 0.288 y el kstest no lo rechaza.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> 1.2.3 Prueba Kolmogorov - Smirnov <span>**
+
+A partir de esta prueba vamos a confirmar de forma total si se distribuye como una **exponencial**.
+
+</div>
+
+<center>
+$H_0= \text{Se distribuye como una exponencial}$
+
+$H_1= \text{No se distribuye como una exponencial}$
+
+
+```{r,echo=FALSE}
+ks.test(F9,"pexp",(fitdist(DF1$T_ENTRE_LLEGADA,"exp")$estimate))
+```
+
+<div style="text-align: justify">
+
+Como se logra apreciar el P-value es mayor al 0.05, puesto que estamos aplicando una confianza del 0.95. Así que se **acepta** la hipótesis nula.
+
+</div>
+
+<center>
+$\text{Tiempo entre Llegadas = }exp(0.05144562 \times t)$
+
+#### **<span style="color:dodgerblue"> 2 Tiempo de llegadas <span>**
+<div style="text-align: justify">
+**<span style="color:darkblue">  2.1.Análisis descriptivo <span>**
+
+A partir de un gráfico de caja, podemos ver lo siguiente:
+</div>
+
+<center>
+```{r,echo=FALSE}
+
+boxplot(F6,breaks = 15,probability = TRUE, main = "Tiempo de llegadas",ylab="Probabilidad",xlab="Tiempo (seg)",col=rgb(0.7,1,0.2,0.5), horizontal = TRUE)
+abline(v = mean(F6, na.rm = TRUE), horizontal = TRUE,col="red",lwd=2)
+
+summary(F6, na.rm = TRUE)
+
+```
+
+<div style="text-align: justify">
+En el boxplot no notamos ningún dato atípico, por lo que nuestros datos no se ven alterados. El **Tiempo de llegada** en su mayoría está en el intervalo [2812;6874], este intervalo en segundos.
+
+
+Realizamos un histograma para tener las primeras nociones a identificar a que modelo conocido se distribuye.
+
+Viéndolo desde un histograma:
+</div>
+
+
+```{r,echo=FALSE}
+hist(F6,breaks = 200,probability = TRUE, main = "Histograma tiempo de llegadas",ylab="Fracuencia",xlab="Tiempo de llegada (seg)",col="lightblue")
+
+```
+
+<div style="text-align: justify">
+
+Notamos que hay cierta similitud a un modelo uniforme y para confirmarlo haremos una gráfica de Cullen and Frey y analizar cómo se modelan los tiempos de llegadas.
+
+</div>
+
+```{r}
+descdist(F6,discrete=FALSE, boot=500)
+```
+<div style="text-align: justify">
+Apreciamos que la observación se encuentra precisamente en la distribución uniforme. Para encontrar los parámetros que maximicen la función uniforme haremos uso del comando fitdist de R.
+</div>
+```{r eval=TRUE, echo=FALSE, message=FALSE,warning=FALSE}
+tdellegadas_unif<-fitdist(F6,"unif")
+tdellegadas_unif
+```
+<div style="text-align: justify">
+La función fitdist nos lanza los siguientes parámetros de a=18 y b=9737 para los tiempos de llegada. 
+Ahora realizamos un plot de la data con el modelo uniforme.
+</div>
+```{r}
+plot(tdellegadas_unif)
+```
+<div style="text-align: justify">
+Vemos que en cada gráfica los datos se aproximan de manera correcta a la distribución uniforme. Del mismo modo, usaremos la función gofsat para verificar por medio del k.test lo siguiente:
+</div>
+<center>
+$H_0= \text{Se distribuye como una uniforme}$
+
+$H_1= \text{No se distribuye como una uniforme}$
+
+```{r}
+Validacion_Tiempo_llegadas <- gofstat(tdellegadas_unif)
+Validacion_Tiempo_llegadas
+```
+
+
+
+<div style="text-align: justify">
+
+Como se logra apreciar el P-value se aproxima a 0.05, puesto que estamos aplicando una confianza del 0.95. Por lo que se podría rechazar la hipótesis nula. Sin embargo, al ser un proyecto aplicado en la vida real y con todos los antecedentes gráficos mostrados validamos la hipótesis nula. Por lo tanto, tiene una **distribución uniforme**.
+</div>
+
+#### **<span style="color:dodgerblue"> 3 Tiempo de espera del ascensor  <span>**
+
+**<span style="color:darkblue">  3.1.Análisis descriptivo <span>**
+
+A partir de un gráfico de caja, podemos ver lo siguiente:
+</div>
+
+<center>
+```{r,echo=FALSE}
+
+boxplot(F16,breaks = 15,probability = TRUE, main = "Tiempo de espera del ascensor",ylab="Probabilidad",xlab="Tiempo (seg)",col="purple", horizontal = TRUE)
+abline(v = mean(F16, na.rm = TRUE), horizontal = TRUE,col="red",lwd=2)
+
+summary(F16, na.rm = TRUE)
+
+```
+
+<div style="text-align: justify">
+Según lo que podemos ver, nuestro tiempo mínimo es de 0.0 segundos y el tiempo máximo fue de 229 segundos. Entonces, el **Tiempo de espera del ascensor** varía en 229 segundos. Además, podemos decir que los datos se concentran entre [12.00;55.00] segundos.
+
+La media/promedio de los datos es de 39.45 segundos para la variable en estudio, representado con la línea roja. Y, que esta es mayor que la mediana (línea negra), lo que nos indica el sesgo hacia la derecha.
+
+También, podemos observar los datos atípicos y eso lo podemos justificar, por ejemplo, que el usuario llego justo después que el ascensor halla cerrado sus puertas.
+
+Viéndolo desde un histograma:
+</div>
+
+<center>
+```{r,echo=FALSE}
+hist(F16,breaks = 10,probability = TRUE, main = "Tiempo de espera del ascensor",ylab="Probabilidad",xlab="Tiempo (seg)",col="purple")
+
+```
+
+<div style="text-align: justify">
+En relación al tiempo entre llegada podemos observar que la frecuencia más alta se ve en los primeros intervalos, mientra va disminuyendo de manera progresiva, lo cual corresponde con el comportamiento de una variable aleatoria que sigue un **modelo exponencial**.
+
+</div>
+
+<div style="text-align: justify">
+#### **<span style="color:dodgerblue"> 3.2 Modelo de la variable <span>**
+
+**<span style="color:green"> 3.2.1 Curva teórica vs histograma <span>**
+
+
+Para realizar esta comparación, compararemos la distribución de densidad y acumulativa de los datos recogidos en el tamaño de muestra:
+
+</div>
+
+<center>
+```{r,echo=FALSE}
+plotdist(F9,histo = TRUE,demp = TRUE,col="purple")
+```
+
+<div style="text-align: justify">
+
+Gracias a la cantidad de datos tomados, podemos ver una similitud con el **modelo exponencial** y esto se refleja en ambas gráficas presentadas.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> 3.2.2 Gráfica Cullen y Frey <span>**
+
+
+Para verificar que tan fiable es nuestro análisis anterior, nos ayudaremos de la gráfica Cullen y Frey:
+
+</div>
+
+```{r,echo=FALSE}
+descdist(F16,boot = 1000,)
+
+```
+
+<div style="text-align: justify">
+
+Como observamos en la gráfica, nuestros datos tienen una tendencia a ser una distribución **exponencial** y **gamma**. Por lo que hacemos un ajuste para ver en cual entraría nuestra variable.
+
+</div>
+
+```{r,echo=FALSE}
+EXP2<-gofstat(fitdist(F16,"exp"))
+EXP2
+plot(fitdist(F16,"exp"))
+fitdist(F16,"exp")
+```
+
+<div style="text-align: justify">
+
+Como observamos en la arriba, solo nos salen los parámetros para la exponencial y los gráficos señalan que se acerca mucho a una exponencial. Por lo que vamos a decir que se puede modelar como una **exponencial**. Caso parecido al modelamiento de la primera variable.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> 3.2.3 Prueba Kolmogorov - Smirnov <span>**
+
+A partir de esta prueba vamos a confirmar de forma total si se distribuye como una **exponencial**.
+
+</div>
+
+<center>
+$H_0= \text{Se distribuye como una exponencial}$
+
+$H_1= \text{No se distribuye como una exponencial}$
+
+
+```{r,echo=FALSE}
+ks.test(F16,"pexp",(fitdist(F16,"exp")$estimate))
+```
+
+<div style="text-align: justify">
+
+Como se logra apreciar el P-value es mayor al 0.05, puesto que estamos aplicando una confianza del 0.95. Así que se **acepta** la hipótesis nula.
+
+</div>
+
+<center>
+$\text{Tiempo de espera del ascensor = }exp(0.02534854 \times t)$
+
+<div style="text-align: justify">
+
+#### **<span style="color:dodgerblue"> 4 Duración Total del servicio del ascensor  <span>**
+
+**<span style="color:darkblue">  4.1.Análisis descriptivo <span>**
+
+A partir de un gráfico de caja, podemos ver lo siguiente:
+</div>
+
+<center>
+```{r,echo=FALSE}
+
+boxplot(F14,breaks = 15,probability = TRUE, main = "Duración Total del servicio del ascensor",ylab="Probabilidad",xlab="Tiempo (seg)",col="orange", horizontal = TRUE)
+abline(v = mean(F14, na.rm = TRUE), horizontal = TRUE,col="red",lwd=2)
+
+summary(F14, na.rm = TRUE)
+
+```
+
+<div style="text-align: justify">
+Según lo que podemos ver, nuestro tiempo mínimo es de 5.0 segundos y el tiempo máximo fue de 263.0 segundos. Entonces, el **Duración Total del servicio del ascensor** varía en 258 segundos. Además, podemos decir que los datos se concentran entre [44.00;88.00] segundos.
+
+La media/promedio de los datos es de 70.36 segundos para la variable en estudio, representado con la línea roja. Y, que esta es mayor que la mediana (línea negra), lo que nos indica el sesgo hacia la derecha.También, podemos observar los datos atípicos.
+
+Viéndolo desde un histograma:
+</div>
+
+<center>
+```{r,echo=FALSE}
+hist(F14,breaks = 10,probability = TRUE, main = "Duración Total del servicio del ascensor",ylab="Probabilidad",xlab="Tiempo (seg)",col="orange")
+
+```
+
+<div style="text-align: justify">
+En relación a la duración total podemos observar que la frecuencia más alta se encuentra entre [25;75], mientras va aumentando al llegar al intervalo y disminuyendo de manera progresiva cuando se aleja del intervalo, lo cual corresponde con el comportamiento de una variable aleatoria que sigue un **modelo  gamma**.
+
+</div>
+
+<div style="text-align: justify">
+#### **<span style="color:dodgerblue"> 4.2 Modelo de la variable <span>**
+
+**<span style="color:green"> 4.2.1 Curva teórica vs histograma <span>**
+
+
+Para realizar esta comparación, compararemos la distribución de densidad y acumulativa de los datos recogidos en el tamaño de muestra:
+
+</div>
+
+<center>
+```{r,echo=FALSE}
+plotdist(F14,histo = TRUE,demp = TRUE,col="orange")
+```
+
+<div style="text-align: justify">
+
+Gracias a la cantidad de datos tomados, podemos ver una similitud con una **gamma** y esto se refleja en ambas gráficas presentadas.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> 3.2.2 Gráfica Cullen y Frey <span>**
+
+Para verificar que tan fiable es nuestro análisis anterior, nos ayudaremos de la gráfica Cullen y Frey:
+
+</div>
+
+```{r,echo=FALSE}
+descdist(F14,boot = 1000,)
+```
+
+<div style="text-align: justify">
+
+Como observamos en la gráfica, nuestros datos tienen una tendencia a ser una distribución **exponencial** y **gamma**. Por lo que hacemos un ajuste para ver en cual entraría nuestra variable.
+
+</div>
+
+```{r,echo=FALSE}
+EXP3<-gofstat(fitdist(F14,"exp"))
+EXP3
+plot(fitdist(F14,"exp"))
+fitdist(F14,"exp")
+```
+
+<div style="text-align: justify">
+
+Como podemos observar, los datos no estas sobre la línea de tendencia. Por lo que si la elegimos, tendriamos un mayor error al momento de simular. Por ello, pasamos al siguiente modelo para observar si se ajusta de una mejor manera.
+
+</div>
+
+```{r,echo=FALSE}
+GAMMA2<-gofstat(fitdist(F14,"gamma"))
+GAMMA2
+plot(fitdist(F14,"gamma"))
+fitdist(F14,"gamma")
+```
+
+<div style="text-align: justify">
+
+Como observamos en la arriba, los datos se ajustan de una mejor manera a la línea de tendencia lo que nos indica que es una mejor aproximación a nuestro modelo ideal para la variable, pero usaremos una prueba adicional para confirmalo por completo.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> 3.2.3 Prueba Kolmogorov - Smirnov <span>**
+
+A partir de esta prueba vamos a confirmar de forma total si se distribuye como una **gamma**.
+
+</div>
+
+<center>
+$H_0= \text{Se distribuye como una gamma}$
+
+$H_1= \text{No se distribuye como una gamma}$
+
+
+```{r,echo=FALSE}
+ks.test(F14,"pgamma",(fitdist(F14,"gamma")$estimate))
+```
+
+
+
+SISTEMA COMPLETO
+
+
+El sistema se ha observado durante 9737 segundos, esto es equivalente a 162.2 minutos. En el transcurso de este tiempo lograron pasar por el proceso 638 personas en total. Por lo que, la tasa es de 3.9 o 4 personas por minuto en el caso real.
+```{r}
+sum(DF1$GRUPO)
+```
+TORRE A
+
+En la Torre A pasaron exactamente 439 personas y como el proceso fue observado por 9737 segundos, equivalente a 162 minutos. Sin embargo, se ha identificado que pasaron 439 personas por la Torre A. Por lo que, la tasa correspondientes es de 2.7 personas por minutos o 3 personas por minuto en el caso real.
+
+```{r}
+sum(DA$GRUPO)
+```
+TORRE B
+
+En la torre B pasaron exactamente 199 personas y como el proceso fue observado por 9737 segundos, equivalente a 162 minutos. Sin embargo, se ha identificado que pasaron 199 personas por la Torre B. Por lo que, la tasa correspondiente es de 1.22 personas por minuto o 1 personas por minuto en el caso real.
+```{r}
+sum(DB$GRUPO)
+```
+############################################################################################
+
+```{r}
+table(DA$CANAL)/nrow(DA)
+```
+```{r}
+table(DB$CANAL)/nrow(DB)
+```
+```{r}
+table(DF1$PISO)/nrow(DF1)
+```
+```{r}
+table(DF1$TORRE)/nrow(DF1)
+```
+```{r}
+table(DF1$CANAL)/nrow(DF1)
+```
+```{r}
+table(DF1$GRUPO)/nrow(DF1)
+```
+
+
+
+
+
+## Simulación Torre A
+
+* Horario de atención 12 a 5 pm
+* Las personas que llegan por la puerta 1 me hacen ganar sol
+* Las personas que llegan por la puerta 2 me hacen ganar 3 soles
+* Las personas que llegan por la puerta 3 me hacen ganar 5 soles
+
+*Personas que llegan al ascensor A
+*Personas que llegan al ascensor B
+*Personas que llegan al ascensor C
+*Personas que llegan al ascensor D
+
+```{r}
+
+Simulacion <- function(m){
+
+replicas <- c() #cada replica representa un día de atención
+
+for (i in 1:m) {
+  
+###creamos el data-frame  
+datast<-data.frame(matrix(ncol = 7, nrow = 1,
+                      dimnames = list(NULL, c("Numero de usuario", "Piso", "Torre", "Canal", "Grupo", "Hora de llegada", "Hora toma ascensor"))))  
+###Creando clientes
+Tiempo_simulacion=10000
+Hora_actual=0
+indice=1
+Vector_piso_que_elige<-(c(-2,-1,2,3,4,5,6,7,8,9,10,11))
+Vector_torre_que_elige<-(c("A","B"))
+vector_canal_asignado<-(c("A","B","C","D"))
+vector_grupo<-(c(1,2,3,4,5,6,7))
+while (Hora_actual<Tiempo_simulacion) {
+
+  #creando el usuario n
+  Numero_de_usuario<-indice
+   #generamos piso que elige usuario n
+  piso_que_elige<-sample(Vector_piso_que_elige,1,T,prob=c(0.030,0.004,0.008,0.004,0.042,0.064,0.202,0.142,0.168,0.092,0.116,0.128))
+  #generamos torre que elige de usuario n
+  torre_que_elige<-sample(Vector_torre_que_elige,1,T,prob=c(0.686,0.314))
+  #generamos canal asignado de usuario n
+  canal_asignado<-sample(vector_canal_asignado,1,T,prob=c(0.250,0.184,0.270,0.296))
+  #generamos grupos con los que llega usuario n
+  cantidad_grupo<-sample(vector_grupo,1,T,prob=c(0.822,0.116,0.040,0.014,0.004,0.002,0.002))
+  
+  
+  #generamos la hora de llegada del usuario n
+  if(Hora_actual==0){
+    Hora_de_llegada<-0+runif(1,18,9737)
+  }
+  else{
+    Hora_de_llegada<-as.numeric(datast[indice,4])+runif(1,18,9737)
+  }
+  
+  
+  #generamos la hora toma el ascensor
+  
+   Hora_toma_ascensor<-Hora_de_llegada+rgamma(1,3.42886616 , 0.04907175)
+   
+     #generamos el vector de cliente n
+  usuario_n<-c(Numero_de_usuario,piso_que_elige,torre_que_elige,canal_asignado,cantidad_grupo,Hora_de_llegada,Hora_toma_ascensor)
+
+  
+  #agregamos el cliente n a la data si llega antes de el tiempo evaluado
+  if(Hora_de_llegada<Tiempo_simulacion){
+    datast<-rbind(dataset,usuario_n)
+  }
+  
+  #actualizamos la hora actual a la llegada del ultimo cliente
+  Hora_actual<-Hora_de_llegada
+  
+  #sumamos uno al indice para evaluar al siguiente cliente 
+  indice<-indice+1
+}
+  datast <- datast[-1, ]
+
+#generamos los tiempos en cada estación 
+datast$tiempo_entre_llegadas<-c(datast$Hora.de.llegada[1],diff(as.numeric(datast$Hora.de.llegada)))
+
+
+datast$tiempo_de_cola<-c(as.numeric(datast$Hora.toma.ascensor)-as.numeric(datast$Hora.de.llegada))
+
+datast$Tiempo_de_cola<-replace(datast$tiempo_de_cola,datast$tiempo_de_cola<0,0)
+
+# sistema unicanal personas en la cola
+
+b=nrow(datast)-1
+usuarios_en_cola<-c(0,1:b)
+datast<-cbind(datast,usuarios_en_cola)
+
+for(k in 1:nrow(datast)){
+  
+  hsalida<-as.numeric(datast[k,6])
+  cola_i=0
+  y=k
+    while(as.numeric(datast[y,4])<hsalida){
+    cola_i=cola_i+1
+    y=y+1
+      
+      if(y>nrow(datast)){
+        break
+      }
+    }
+  datast[k,18]=cola_i
+}
+
+
+}
+
+dataset
+```
+
+
+
+
+
+hora = 0
+fin = 9737
+usuarios=0
+entrellegadas = 0
+
+while(hora + entrellegadas <= fin){ # así me aseguro que no llegue una persona después que se cierran las puertas.
+  hora <- hora + entrellegadas 
+  tipo <- sample(c(1,2,3,4),1,prob=c(0.1166181,0.2682216,0.3935860,0.2215743))
+  
+  if(tipo == 1){
+    usuarios = usuarios + 1
+  }
+  if(tipo == 2){
+    usuarios = usuarios + 1
+  }
+  if(tipo == 3){
+    usuarios = usuarios + 1 
+  }
+  else{
+    usuarios= usuarios + 1
+  }
+  entrellegadas <- rexp(1,0.04928161)
+}
+ replicas[i] <- usuarios
+}
+return(replicas)
+}
+
+```
+
+
+```{r}
+usuarios <- Simulacion(100)
+
+mean(usuarios)
+```
+
+
+
+
+### **<span style="color:dodgerblue"> ANÁLISIS DE VARIABLES TORRE A <span>**
+
+#### **<span style="color:dodgerblue"> 1. Tiempo entre llegadas Torre A <span>**
+<div style="text-align: justify">
+**<span style="color:darkblue">  Análisis descriptivo <span>**
+
+A partir de un gráfico de caja, podemos ver lo siguiente:
+</div>
+
+<center>
+```{r,echo=FALSE}
+boxplot(A9,breaks = 10,probability = TRUE, main = "Tiempo entre llegadas",xlab="Tiempo (seg)",col=rgb(0.7,1,0.2,0.5), horizontal = TRUE)
+abline(v = mean(A9, na.rm = TRUE), horizontal = TRUE,col="red",lwd=2)
+
+summary(A9, na.rm = TRUE)
+
+```
+
+<div style="text-align: justify">
+Según lo que podemos ver, nuestro tiempo mínimo es de 0.0 segundos y el tiempo máximo fue de 164 segundos. Entonces, el **Tiempo entre llegadas** varía en 164 segundos. Además, podemos decir que los datos se concentran entre [7.00;27.00] segundos.
+
+La media/promedio de los datos es de 20 segundos para la variable en estudio, representado con la línea roja. Y, que esta es mayor que la mediana (línea negra), lo que nos indica el sesgo hacia la derecha. También, podemos observar los datos atípicos.
+
+Viéndolo desde un histograma:
+</div>
+
+<center>
+```{r,echo=FALSE}
+hist(A9,breaks = 10,probability = TRUE, main = "Tiempo entre llegadas",ylab="Probabilidad",xlab="Tiempo (min)",col=rgb(0.7,1,0.2,0.5))
+
+```
+<div style="text-align: justify">
+En relación al tiempo entre llegada podemos observar que la frecuencia más alta se ve en los primeros intervalos, mientra va disminuyendo de manera progresiva, lo cual corresponde con el comportamiento de una variable aleatoria que sigue un **modelo exponencial**.
+
+</div>
+
+#### **<span style="color:dodgerblue"> 1.2 Modelo de la variable <span>**
+
+**<span style="color:green"> 1.2.1 Curva teórica vs histograma <span>**
+
+<div style="text-align: justify">
+Para realizar esta comparación, compararemos la distribución de densidad y acumulativa de los datos recogidos en el tamaño de muestra:
+
+</div>
+
+<center>
+```{r,echo=FALSE}
+plotdist(A9,histo = TRUE,demp = TRUE,col=rgb(0.7,1,0.2,0.5))
+```
+<div style="text-align: justify">
+Gracias a la cantidad de datos tomados, podemos ver una similitud con el **modelo exponencial** y esto se refleja en ambas gráficas presentadas.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> 1.2.2 Gráfica Cullen y Frey <span>**
+
+
+Para verificar que tan fiable es nuestro análisis anterior, nos ayudaremos de la gráfica Cullen y Frey:
+
+</div>
+
+```{r,echo=FALSE}
+descdist(A9,boot = 1000,)
+```
+<div style="text-align: justify">
+
+Como observamos en la gráfica, nuestros datos tienen una tendencia a ser una distribución **exponencial** y **gamma**. Por lo que hacemos un ajuste para ver en cual entraría nuestra variable.
+
+</div>
+
+```{r,echo=FALSE}
+EXP1<-gofstat(fitdist(A9,"exp"))
+EXP1
+plot(fitdist(A9,"exp"))
+fitdist(A9,"exp")
+```
+
+<div style="text-align: justify">
+
+Como observamos, solo nos salen los parámetros para la exponencial y los gráficos señalan que se acerca mucho a una exponencial. Por lo que vamos a decir que se puede modelar como una **exponencial**. Además, que el P-value es de 0.07 y el kstest no lo rechaza.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> 1.2.3 Prueba Kolmogorov - Smirnov <span>**
+
+A partir de esta prueba vamos a confirmar de forma total si se distribuye como una **exponencial**.
+
+</div>
+
+<center>
+$H_0= \text{Se distribuye como una exponencial}$
+
+$H_1= \text{No se distribuye como una exponencial}$
+
+
+```{r,echo=FALSE}
+ks.test(A9,"pexp",(fitdist(DA$T_ENTRE_LLEGADA,"exp")$estimate))
+```
+<div style="text-align: justify">
+Obtenemos un p-value de 0.046, valor cercano a 0.05. Con evidencias gráficas podemos corroborar que no podemos rechazar la hipótesis nula. Por lo tanto, concluimos que sigue una **distribución exponencial**.
+</div>
+
+<center>
+$\text{Tiempo entre Llegadas Torre A = }exp(0.04928161 \times t)$
+
+#### **<span style="color:dodgerblue">  Tiempo de llegadas Torre A <span>**
+<div style="text-align: justify">
+**<span style="color:darkblue">  2.1.Análisis descriptivo <span>**
+
+A partir de un gráfico de caja, podemos ver lo siguiente:
+</div>
+
+<center>
+```{r,echo=FALSE}
+
+boxplot(A6,breaks = 15,probability = TRUE, main = "Tiempo de llegadas Torre A",ylab="Probabilidad",xlab="Tiempo (seg)",col=rgb(0.7,1,0.2,0.5), horizontal = TRUE)
+abline(v = mean(A6, na.rm = TRUE), horizontal = TRUE,col="red",lwd=2)
+
+summary(A6, na.rm = TRUE)
+
+```
+<div style="text-align: justify">
+En el boxplot no notamos ningún dato atípico, por lo que nuestros datos no se ven alterados. El **Tiempo de llegada** en su mayoría está en el intervalo [2920;7022], este intervalo en segundos.
+
+
+Realizamos un histograma para tener las primeras nociones a identificar a que modelo conocido se distribuye.
+
+Viéndolo desde un histograma:
+</div>
+
+
+```{r,echo=FALSE}
+hist(A6,breaks = 200,probability = TRUE, main = "Histograma tiempo de llegadas Torre A",ylab="Fracuencia",xlab="Tiempo de llegada (seg)",col="lightblue")
+
+```
+
+<div style="text-align: justify">
+
+Notamos que hay cierta similitud a un modelo uniforme y para confirmarlo haremos una gráfica de Cullen and Frey y analizar cómo se modelan los tiempos de llegadas.
+
+</div>
+
+```{r}
+descdist(A6,discrete=FALSE, boot=500)
+```
+<div style="text-align: justify">
+Apreciamos que la observación se encuentra precisamente en la distribución uniforme. Para encontrar los parámetros que maximicen la función uniforme haremos uso del comando fitdist de R.
+</div>
+```{r eval=TRUE, echo=FALSE, message=FALSE,warning=FALSE}
+tdellegadasA_unif<-fitdist(A6,"unif")
+tdellegadasA_unif
+```
+<div style="text-align: justify">
+La función fitdist nos lanza los siguientes parámetros de a=23 y b=9737 para los tiempos de llegada. 
+Ahora realizamos un plot de la data con el modelo uniforme.
+</div>
+```{r}
+plot(tdellegadasA_unif)
+```
+<div style="text-align: justify">
+Vemos que en cada gráfica los datos se aproximan de manera correcta a la distribución uniforme. Del mismo modo, usaremos la función gofsat para verificar por medio del ks.test lo siguiente:
+</div>
+<center>
+$H_0= \text{Se distribuye como una uniforme}$
+
+$H_1= \text{No se distribuye como una uniforme}$
+
+```{r}
+Validacion_Tiempo_llegadasA <- gofstat(tdellegadasA_unif)
+Validacion_Tiempo_llegadasA
+```
+<div style="text-align: justify">
+
+Como se logra apreciar el P-value es 0.07, puesto que estamos aplicando una confianza del 0.95. Por lo que no se rechaza la hipótesis nula. Por lo tanto con todos los antecedentes gráficos mostrados y el p-value, validamos tiene una **distribución uniforme**.
+</div>
+
+#### **<span style="color:dodgerblue"> 3 Tiempo de espera del ascensor de la Torre A  <span>**
+
+**<span style="color:darkblue">  3.1.Análisis descriptivo <span>**
+
+A partir de un gráfico de caja, podemos ver lo siguiente:
+</div>
+
+<center>
+```{r,echo=FALSE}
+
+boxplot(A16,breaks = 15,probability = TRUE, main = "Tiempo de espera del ascensor Torre A",ylab="Probabilidad",xlab="Tiempo (seg)",col="purple", horizontal = TRUE)
+abline(v = mean(A16, na.rm = TRUE), horizontal = TRUE,col="red",lwd=2)
+
+summary(A16, na.rm = TRUE)
+
+```
+<div style="text-align: justify">
+Entonces, sobre el **Tiempo de espera del ascensor de la Torre A**podemos decir que los datos se concentran entre [15.00;60.00] segundos.
+
+La media/promedio de los datos es de 43.54 segundos para la variable en estudio, representado con la línea roja. Y, que esta es mayor que la mediana (línea negra), lo que nos indica el sesgo hacia la derecha.
+
+También, podemos observar los datos atípicos y eso lo podemos justificar, por ejemplo, que el usuario llego justo después que el ascensor haya cerrado sus puertas.
+
+Viéndolo desde un histograma:
+</div>
+
+<center>
+```{r,echo=FALSE}
+hist(A16,breaks = 10,probability = TRUE, main = "Tiempo de espera del ascensor",ylab="Probabilidad",xlab="Tiempo (seg)",col="purple")
+
+```
+<div style="text-align: justify">
+En relación al tiempo entre llegada podemos observar que la frecuencia más alta se ve en los primeros intervalos, mientra va disminuyendo de manera progresiva, lo cual corresponde con el comportamiento de una variable aleatoria que sigue un **modelo exponencial**.
+
+</div>
+
+<div style="text-align: justify">
+#### **<span style="color:dodgerblue"> 3.2 Modelo de la variable <span>**
+
+**<span style="color:green"> 3.2.1 Curva teórica vs histograma <span>**
+
+
+Para realizar esta comparación, compararemos la distribución de densidad y acumulativa de los datos recogidos en el tamaño de muestra:
+
+</div>
+
+<center>
+```{r,echo=FALSE}
+plotdist(A9,histo = TRUE,demp = TRUE,col="purple")
+```
+<div style="text-align: justify">
+
+Gracias a la cantidad de datos tomados, podemos ver una similitud con el **modelo exponencial** y esto se refleja en ambas gráficas presentadas.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> 3.2.2 Gráfica Cullen y Frey <span>**
+
+
+Para verificar que tan fiable es nuestro análisis anterior, nos ayudaremos de la gráfica Cullen y Frey:
+
+</div>
+
+```{r,echo=FALSE}
+descdist(A16,boot = 1000,)
+```
+<div style="text-align: justify">
+
+Como observamos en la gráfica, nuestros datos tienen una tendencia a ser una distribución **exponencial** y **gamma**. Por lo que hacemos un ajuste para ver en cual entraría nuestra variable.
+
+</div>
+
+```{r,echo=FALSE}
+EXPA2<-gofstat(fitdist(A16,"exp"))
+EXPA2
+plot(fitdist(A16,"exp"))
+fitdist(A16,"exp")
+```
+<div style="text-align: justify">
+
+Como observamos en la arriba, solo nos salen los parámetros para la exponencial y los gráficos señalan que se acerca mucho a una exponencial. Por lo que vamos a decir que se puede modelar como una **exponencial**. Caso parecido al modelamiento de la primera variable.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> 3.2.3 Prueba Kolmogorov - Smirnov <span>**
+
+A partir de esta prueba vamos a confirmar de forma total si se distribuye como una **exponencial**.
+
+</div>
+
+<center>
+$H_0= \text{Se distribuye como una exponencial}$
+
+$H_1= \text{No se distribuye como una exponencial}$
+
+
+```{r,echo=FALSE}
+ks.test(A16,"pexp",(fitdist(A16,"exp")$estimate))
+```
+<div style="text-align: justify">
+
+Como se logra apreciar el P-value es mayor al 0.05, puesto que estamos aplicando una confianza del 0.95. Así que se **acepta** la hipótesis nula.
+
+</div>
+
+<center>
+$\text{Tiempo de espera del ascensor = }exp(0.02296926	 \times t)$
+
+<div style="text-align: justify">
+
+#### **<span style="color:dodgerblue"> 4 Duración Total del servicio del ascensor Torre A  <span>**
+
+**<span style="color:darkblue">  4.1.Análisis descriptivo <span>**
+
+A partir de un gráfico de caja, podemos ver lo siguiente:
+</div>
+
+<center>
+```{r,echo=FALSE}
+
+boxplot(A14,breaks = 15,probability = TRUE, main = "Duración Total del servicio del ascensor Torre A",ylab="Probabilidad",xlab="Tiempo (seg)",col="orange", horizontal = TRUE)
+abline(v = mean(A14, na.rm = TRUE), horizontal = TRUE,col="red",lwd=2)
+
+summary(A14, na.rm = TRUE)
+
+```
+<div style="text-align: justify">
+Según lo que podemos ver, nuestro tiempo mínimo es de 4.0 segundos y el tiempo máximo fue de 263.0 segundos. Entonces, el **Duración Total del servicio del ascensor en la Torre A** varía en 259 segundos. Además, podemos decir que los datos se concentran entre [45.00;94.00] segundos.
+
+La media/promedio de los datos es de 73 segundos para la variable en estudio, representado con la línea roja. Y, que esta es mayor que la mediana (línea negra), lo que nos indica el sesgo hacia la derecha.También, podemos observar los datos atípicos.
+
+Viéndolo desde un histograma:
+</div>
+
+<center>
+```{r,echo=FALSE}
+hist(A14,breaks = 10,probability = TRUE, main = "Duración Total del servicio del ascensor Torre A",ylab="Probabilidad",xlab="Tiempo (seg)",col="orange")
+
+```
+<div style="text-align: justify">
+En relación a la duración total podemos observar que la frecuencia más alta se encuentra entre [25;75], mientras va aumentando al llegar al intervalo y disminuyendo de manera progresiva cuando se aleja del intervalo, lo cual corresponde con el comportamiento de una variable aleatoria que sigue un **modelo  gamma**.
+
+</div>
+
+<div style="text-align: justify">
+#### **<span style="color:dodgerblue"> 4.2 Modelo de la variable <span>**
+
+**<span style="color:green"> 4.2.1 Curva teórica vs histograma <span>**
+
+
+Para realizar esta comparación, compararemos la distribución de densidad y acumulativa de los datos recogidos en el tamaño de muestra:
+
+</div>
+
+<center>
+```{r,echo=FALSE}
+plotdist(A14,histo = TRUE,demp = TRUE,col="orange")
+```
+<div style="text-align: justify">
+
+Gracias a la cantidad de datos tomados, podemos ver una similitud con una **gamma** y esto se refleja en ambas gráficas presentadas.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> 3.2.2 Gráfica Cullen y Frey <span>**
+
+Para verificar que tan fiable es nuestro análisis anterior, nos ayudaremos de la gráfica Cullen y Frey:
+
+</div>
+
+```{r,echo=FALSE}
+descdist(A14,boot = 1000,)
+```
+<div style="text-align: justify">
+
+Como observamos en la gráfica, nuestros datos tienen una tendencia a ser una distribución **exponencial** y **gamma**. Por lo que hacemos un ajuste para ver en cual entraría nuestra variable.
+
+</div>
+
+```{r,echo=FALSE}
+EXPA3<-gofstat(fitdist(A14,"exp"))
+EXPA3
+plot(fitdist(A14,"exp"))
+fitdist(A14,"exp")
+```
+<div style="text-align: justify">
+
+Como podemos observar, los datos no estas sobre la línea de tendencia. Por lo que si la elegimos, tendríamos un mayor error al momento de simular. Por ello, pasamos al siguiente modelo para observar si se ajusta de una mejor manera.
+
+</div>
+
+```{r,echo=FALSE}
+GAMMAA2<-gofstat(fitdist(A14,"gamma"))
+GAMMAA2
+plot(fitdist(A14,"gamma"))
+fitdist(A14,"gamma")
+```
+<div style="text-align: justify">
+
+Como observamos en la arriba, los datos se ajustan de una mejor manera a la línea de tendencia lo que nos indica que es una mejor aproximación a nuestro modelo ideal para la variable, pero usaremos una prueba adicional para confirmarlo por completo.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> 3.2.3 Prueba Kolmogorov - Smirnov <span>**
+
+A partir de esta prueba vamos a confirmar de forma total si se distribuye como una **gamma**.
+
+</div>
+
+<center>
+$H_0= \text{Se distribuye como una gamma}$
+
+$H_1= \text{No se distribuye como una gamma}$
+
+
+```{r,echo=FALSE}
+ks.test(A14,"pgamma",(fitdist(A14,"gamma")$estimate))
+```
+<div style="text-align: justify">
+
+En conclusión, con los antecedentes podemos llegar a que sigue una **distribución gamma**.
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+### **<span style="color:dodgerblue"> 10. ANÁLISIS DE VARIABLES <span>**
+
+#### **<span style="color:dodgerblue"> 1. Tiempo entre llegadas <span>**
+<div style="text-align: justify">
+
+**<span style="color:purple">  TORRE B <span>**
+
+**<span style="color:darkblue">  Análisis descriptivo <span>**
+
+A partir de un gráfico de caja, podemos ver lo siguiente:
+</div>
+
+<center>
+```{r,echo=FALSE}
+boxplot(B9,breaks = 10,probability = TRUE, main = "Tiempo entre llegadas",xlab="Tiempo (seg)",col=rgb(0.7,1,0.2,0.5), horizontal = TRUE)
+abline(v = mean(B9, na.rm = TRUE), horizontal = TRUE,col="red",lwd=2)
+
+summary(B9, na.rm = TRUE)
+
+```
+
+<div style="text-align: justify">
+Según lo que podemos ver, nuestro tiempo mínimo es de 0.0 segundos y el tiempo máximo fue de 119 segundos. Entonces, el **Tiempo entre llegadas** varía en 119 segundos. Además, podemos decir que los datos se concentran entre [5.00;23.00] segundos.
+
+La media/promedio de los datos es de 17.57 segundos para la variable en estudio, representado con la línea roja. Y, que esta es mayor que la mediana (línea negra), lo que nos indica el sesgo hacia la derecha. También, podemos observar los datos atípicos.
+
+Viéndolo desde un histograma:
+</div>
+
+<center>
+```{r,echo=FALSE}
+hist(B9,breaks = 10,probability = TRUE, main = "Tiempo entre llegadas",ylab="Probabilidad",xlab="Tiempo (min)",col=rgb(0.7,1,0.2,0.5))
+
+```
+
+<div style="text-align: justify">
+En relación al tiempo entre llegada podemos observar que la frecuencia más alta se ve en los primeros intervalos, mientra va disminuyendo de manera progresiva, lo cual corresponde con el comportamiento de una variable aleatoria que sigue un **modelo exponencial**.
+
+</div>
+
+#### **<span style="color:dodgerblue"> B.1.2 Modelo de la variable <span>**
+
+**<span style="color:green"> B.1.2.1 Curva teórica vs histograma <span>**
+
+<div style="text-align: justify">
+Para realizar esta comparación, compararemos la distribución de densidad y acumulativa de los datos recogidos en el tamaño de muestra:
+
+</div>
+
+<center>
+```{r,echo=FALSE}
+plotdist(B9,histo = TRUE,demp = TRUE,col=rgb(0.7,1,0.2,0.5))
+```
+
+<div style="text-align: justify">
+Gracias a la cantidad de datos tomados, podemos ver una similitud con el **modelo exponencial** y esto se refleja en ambas gráficas presentadas.
+
+</div>
+
+<div style="text-align: justify">
+
+**<span style="color:green"> B.1.2.2 Gráfica Cullen y Frey <span>**
+
+
+Para verificar que tan fiable es nuestro análisis anterior, nos ayudaremos de la gráfica Cullen y Frey:
+
+</div>
+
+```{r,echo=FALSE}
+descdist(B9,boot = 1000,)
+
+```
+
+<div style="text-align: justify">
+
+Como observamos en la gráfica, nuestros datos tienen una tendencia a ser una distribución **exponencial** y **gamma**. Por lo que hacemos un ajuste para ver en cual entraría nuestra variable.
+
+</div>
+
+```{r,echo=FALSE}
+BEXP1<-gofstat(fitdist(B9,"exp"))
+BEXP1
+plot(fitdist(B9,"exp"))
+fitdist(B9,"exp")
+```
+
+<div style="text-align: justify">
+
+Como observamos en la arriba, solo nos salen los parámetros para la exponencial y los gráficos señalan que se acerca mucho a una exponencial. Por lo que vamos a decir que se puede modelar como una **exponencial**. Además, que los puntos de los datos empíricos tienen la misma tendencia del modelo en cuestión.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> B.1.2.3 Prueba Kolmogorov - Smirnov <span>**
+
+A partir de esta prueba vamos a confirmar de forma total si se distribuye como una **exponencial**.
+
+</div>
+
+<center>
+$H_0= \text{Se distribuye como una exponencial}$
+
+$H_1= \text{No se distribuye como una exponencial}$
+
+
+```{r,echo=FALSE}
+ks.test(B9,"pexp",(fitdist(B9,"exp")$estimate))
+```
+
+<div style="text-align: justify">
+
+Como se logra apreciar el P-value es mayor al 0.05, puesto que estamos aplicando una confianza del 0.95. Así que se **acepta** la hipótesis nula.
+
+</div>
+
+<center>
+$\text{Tiempo entre Llegadas = }exp(0.05690468 \times t)$
+
+<div style="text-align: justify">
+#### **<span style="color:dodgerblue"> 2 Tiempo de llegadas <span>**
+
+**<span style="color:purple">  TORRE B <span>**
+
+**<span style="color:darkblue">  B.2.1.Análisis descriptivo <span>**
+
+A partir de un gráfico de caja, podemos ver lo siguiente:
+</div>
+
+<center>
+```{r,echo=FALSE}
+
+boxplot(B6,breaks = 15,probability = TRUE, main = "Tiempo de llegadas",ylab="Probabilidad",xlab="Tiempo (seg)",col=rgb(0.7,1,0.2,0.5), horizontal = TRUE)
+abline(v = mean(B6, na.rm = TRUE), horizontal = TRUE,col="red",lwd=2)
+
+summary(B6, na.rm = TRUE)
+
+```
+
+<div style="text-align: justify">
+En el boxplot no notamos ningún dato atípico, por lo que nuestros datos no se ven alterados. El **Tiempo de llegada** en su mayoría está en el intervalo [2198;6412], este intervalo en segundos.
+
+Realizamos un histograma para tener las primeras nociones a identificar a que modelo conocido se distribuye.
+
+Viéndolo desde un histograma:
+</div>
+
+
+```{r,echo=FALSE}
+hist(B6,breaks = 200,probability = TRUE, main = "Histograma tiempo de llegadas",ylab="Fracuencia",xlab="Tiempo de llegada (seg)",col="lightblue")
+
+```
+
+<div style="text-align: justify">
+
+Notamos que hay cierta similitud a un modelo uniforme y para confirmarlo haremos una gráfica de Cullen and Frey y analizar cómo se modelan los tiempos de llegadas.
+
+</div>
+
+```{r}
+descdist(B6,discrete=FALSE, boot=500)
+```
+<div style="text-align: justify">
+
+Apreciamos que la observación se encuentra cercana a la distribución uniforme. Para encontrar los parámetros que maximicen la función uniforme haremos uso del comando fitdist de R.
+
+</div>
+```{r eval=TRUE, echo=FALSE, message=FALSE,warning=FALSE}
+Btdellegadas_unif<-fitdist(B6,"unif")
+Btdellegadas_unif
+```
+
+<div style="text-align: justify">
+
+La función fitdist nos lanza los siguientes parámetros de a = 18 y b = 9735 para los tiempos de llegada. 
+Ahora realizamos un plot de la data con el modelo uniforme.
+
+</div>
+
+```{r}
+plot(Btdellegadas_unif)
+```
+<div style="text-align: justify">
+Vemos que en cada gráfica los datos se aproximan de manera cercana a la distribución uniforme. Del mismo modo, usaremos la función gofsat para verificar por medio del k.test lo siguiente:
+</div>
+<center>
+$H_0= \text{Se distribuye como una uniforme}$
+
+$H_1= \text{No se distribuye como una uniforme}$
+
+```{r}
+BValidacion_Tiempo_llegadas <- gofstat(Btdellegadas_unif)
+BValidacion_Tiempo_llegadas
+```
+
+
+
+<div style="text-align: justify">
+
+Como se logra apreciar el P-value es mayor a 0.05, puesto que estamos aplicando una confianza del 0.95. Por lo que se podría aceptar la hipótesis nula. Por lo tanto, tiene una **distribución uniforme**.
+
+</div>
+
+$\text{Tiempo de llegadas = }Unif(18, 9735)$
+
+<div style="text-align: justify">
+#### **<span style="color:dodgerblue"> 3 Tiempo de espera del ascensor  <span>**
+
+**<span style="color:purple">  TORRE B <span>**
+
+**<span style="color:darkblue">  B.3.1.Análisis descriptivo <span>**
+
+A partir de un gráfico de caja, podemos ver lo siguiente:
+</div>
+
+<center>
+```{r,echo=FALSE}
+
+boxplot(B16,breaks = 15,probability = TRUE, main = "Tiempo de espera del ascensor",ylab="Probabilidad",xlab="Tiempo (seg)",col="purple", horizontal = TRUE)
+abline(v = mean(F16, na.rm = TRUE), horizontal = TRUE,col="red",lwd=2)
+
+summary(B16, na.rm = TRUE)
+
+```
+
+<div style="text-align: justify">
+Según lo que podemos ver, nuestro tiempo mínimo es de 0.0 segundos y el tiempo máximo fue de 193 segundos. Entonces, el **Tiempo de espera del ascensor** varía en 193 segundos. Además, podemos decir que los datos se concentran entre [9.00;42.00] segundos.
+
+La media/promedio de los datos es de 30.64 segundos para la variable en estudio, representado con la línea roja. Y, que esta es mayor que la mediana (línea negra), lo que nos indica el sesgo hacia la derecha.
+
+También, podemos observar los datos atípicos y eso lo podemos justificar, por ejemplo, que el usuario llego justo después que el ascensor halla cerrado sus puertas.
+
+Viéndolo desde un histograma:
+</div>
+
+<center>
+```{r,echo=FALSE}
+hist(B16,breaks = 10,probability = TRUE, main = "Tiempo de espera del ascensor",ylab="Probabilidad",xlab="Tiempo (seg)",col="purple")
+
+```
+
+<div style="text-align: justify">
+En relación al tiempo entre llegada podemos observar que la frecuencia más alta se ve en los primeros intervalos, mientra va disminuyendo de manera progresiva, lo cual corresponde con el comportamiento de una variable aleatoria que sigue un **modelo exponencial**.
+
+</div>
+
+<div style="text-align: justify">
+#### **<span style="color:dodgerblue"> B.3.2 Modelo de la variable <span>**
+
+**<span style="color:green"> B.3.2.1 Curva teórica vs histograma <span>**
+
+
+Para realizar esta comparación, compararemos la distribución de densidad y acumulativa de los datos recogidos en el tamaño de muestra:
+
+</div>
+
+<center>
+```{r,echo=FALSE}
+plotdist(B9,histo = TRUE,demp = TRUE,col="purple")
+```
+
+<div style="text-align: justify">
+
+Gracias a la cantidad de datos tomados, podemos ver una similitud con el **modelo exponencial** y esto se refleja en ambas gráficas presentadas.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> B.3.2.2 Gráfica Cullen y Frey <span>**
+
+
+Para verificar que tan fiable es nuestro análisis anterior, nos ayudaremos de la gráfica Cullen y Frey:
+
+</div>
+
+```{r,echo=FALSE}
+descdist(B16,boot = 1000,)
+
+```
+
+<div style="text-align: justify">
+
+Como observamos en la gráfica, nuestros datos tienen una tendencia a ser una distribución **exponencial** y **gamma**. Por lo que hacemos un ajuste para ver en cual entraría nuestra variable.
+
+</div>
+
+```{r,echo=FALSE}
+BEXP2<-gofstat(fitdist(B16,"exp"))
+BEXP2
+plot(fitdist(B16,"exp"))
+fitdist(B16,"exp")
+```
+
+<div style="text-align: justify">
+
+Como observamos en la arriba, solo nos salen los parámetros para la exponencial y los gráficos señalan que se acerca mucho a una exponencial. Por lo que vamos a decir que se puede modelar como una **exponencial**. Caso parecido al modelamiento de la primera variable.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> B.3.2.3 Prueba Kolmogorov - Smirnov <span>**
+
+A partir de esta prueba vamos a confirmar de forma total si se distribuye como una **exponencial**.
+
+</div>
+
+<center>
+$H_0= \text{Se distribuye como una exponencial}$
+
+$H_1= \text{No se distribuye como una exponencial}$
+
+
+```{r,echo=FALSE}
+ks.test(B16,"pexp",(fitdist(B16,"exp")$estimate))
+```
+
+<div style="text-align: justify">
+
+Como se logra apreciar el P-value es mayor al 0.05, puesto que estamos aplicando una confianza del 0.95. Así que se **acepta** la hipótesis nula.
+
+</div>
+
+<center>
+$\text{Tiempo de espera del ascensor = }exp(0.03263355 \times t)$
+
+<div style="text-align: justify">
+
+#### **<span style="color:dodgerblue"> 4 Duración Total del servicio del ascensor  <span>**
+
+**<span style="color:darkblue">  TORRE B <span>**
+
+**<span style="color:darkblue">  B.4.1.Análisis descriptivo <span>**
+
+A partir de un gráfico de caja, podemos ver lo siguiente:
+</div>
+
+<center>
+```{r,echo=FALSE}
+
+boxplot(B14,breaks = 15,probability = TRUE, main = "Duración Total del servicio del ascensor",ylab="Probabilidad",xlab="Tiempo (seg)",col="orange", horizontal = TRUE)
+abline(v = mean(B14, na.rm = TRUE), horizontal = TRUE,col="red",lwd=2)
+
+summary(B14, na.rm = TRUE)
+
+```
+
+<div style="text-align: justify">
+Según lo que podemos ver, nuestro tiempo mínimo es de 11.0 segundos y el tiempo máximo fue de 226.0 segundos. Entonces, el **Duración Total del servicio del ascensor** varía en 215 segundos. Además, podemos decir que los datos se concentran entre [41.00;74.00] segundos.
+
+La media/promedio de los datos es de 61.34 segundos para la variable en estudio, representado con la línea roja. Y, que esta es mayor que la mediana (línea negra), lo que nos indica el sesgo hacia la derecha.También, podemos observar los datos atípicos.
+
+Viéndolo desde un histograma:
+</div>
+
+<center>
+```{r,echo=FALSE}
+hist(B14,breaks = 10,probability = TRUE, main = "Duración Total del servicio del ascensor",ylab="Probabilidad",xlab="Tiempo (seg)",col="orange")
+
+```
+
+<div style="text-align: justify">
+En relación a la duración total podemos observar que la frecuencia más alta se encuentra entre [25;100], mientras va aumentando al llegar al intervalo y disminuyendo de manera progresiva cuando se aleja del intervalo, lo cual corresponde con el comportamiento de una variable aleatoria que sigue un **modelo gamma**.
+
+</div>
+
+<div style="text-align: justify">
+#### **<span style="color:dodgerblue"> B.4.2 Modelo de la variable <span>**
+
+**<span style="color:green"> B.4.2.1 Curva teórica vs histograma <span>**
+
+Para realizar esta comparación, compararemos la distribución de densidad y acumulativa de los datos recogidos en el tamaño de muestra:
+
+</div>
+
+<center>
+```{r,echo=FALSE}
+plotdist(B14,histo = TRUE,demp = TRUE,col="orange")
+```
+
+<div style="text-align: justify">
+
+Gracias a la cantidad de datos tomados, podemos ver una similitud con una **gamma** y esto se refleja en ambas gráficas presentadas.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> B.4.2.2 Gráfica Cullen y Frey <span>**
+
+Para verificar que tan fiable es nuestro análisis anterior, nos ayudaremos de la gráfica Cullen y Frey:
+
+</div>
+
+```{r,echo=FALSE}
+descdist(B14,boot = 1000,)
+```
+
+<div style="text-align: justify">
+
+Como observamos en la gráfica, nuestros datos tienen una tendencia a ser una distribución **exponencial** y **gamma**. Por lo que hacemos un ajuste para ver en cual entraría nuestra variable.
+
+</div>
+
+```{r,echo=FALSE}
+BEXP3<-gofstat(fitdist(B14,"exp"))
+BEXP3
+plot(fitdist(B14,"exp"))
+fitdist(B14,"exp")
+```
+
+<div style="text-align: justify">
+
+Como podemos observar, los datos no están sobre la línea de tendencia. Por lo que si la elegimos, tendríamos un mayor error al momento de simular. Por ello, pasamos al siguiente modelo para observar si se ajusta de una mejor manera.
+
+</div>
+
+```{r,echo=FALSE}
+BGAMMA2<-gofstat(fitdist(B14,"gamma"))
+BGAMMA2
+plot(fitdist(B14,"gamma"))
+fitdist(B14,"gamma")
+```
+
+<div style="text-align: justify">
+
+Como observamos en la arriba, los datos se ajustan de una mejor manera a la línea de tendencia lo que nos indica que es una mejor aproximación a nuestro modelo ideal para la variable, pero usaremos una prueba adicional para confirmarlo por completo.
+
+</div>
+
+<div style="text-align: justify">
+**<span style="color:green"> B.4.2.3 Prueba Kolmogorov - Smirnov <span>**
+
+A partir de esta prueba vamos a confirmar de forma total si se distribuye como una **gamma**.
+
+</div>
+
+<center>
+$H_0= \text{Se distribuye como una gamma}$
+
+$H_1= \text{No se distribuye como una gamma}$
+
+
+```{r,echo=FALSE}
+ks.test(B14,"pgamma",(fitdist(B14,"gamma")$estimate))
+```
+
+<div style="text-align: justify">
+
+A pesar de que no acepta la hipótesis nula. Podemos usar este distribución, porque en la vida real no siempre va a coincidir con un modelo de distribución como en este caso.
+
+</div>
+
+$\text{Duración Total del servicio del ascensor = }gamma(t,4.4958299,0.0732992)$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div style="text-align: justify">
+### **<span style="color:dodgerblue"> BIBLIOGRAFÍA <span>**
+
+*Fundamentals of Queweing Theory Fourth Edition. By D.Gross, J. F. Shortle, J. M. Thompson, and C. M. Harris Copyright, 2008 Jhon Wiley & Sons, Inc.*
+
+</div>
